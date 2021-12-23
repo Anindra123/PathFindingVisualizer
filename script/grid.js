@@ -1,4 +1,6 @@
+import { runAstarAlgo } from "./Algorithms/Astar.js";
 import { runBFSAlgo } from "./Algorithms/bfs.js";
+import { runDFSAlgo } from "./Algorithms/dfs.js";
 import { Node } from "./node.js";
 function getCellPos(xpos, ypos, width, rows) {
   let x = xpos;
@@ -64,9 +66,12 @@ window.addEventListener("load", () => {
   const grid = document.querySelector("#grid");
   const ctx = grid.getContext("2d");
   const width = 1000;
-  const rows = 40;
+  const rows = 50;
   const gridLayer = document.querySelector("#grid-layer");
   const runBfsBtn = document.querySelector(".runBFS");
+  const runAstarBtn = document.querySelector(".runAstar");
+  const resetGridBtn = document.querySelector(".resetGrid");
+  const runDFSBtn = document.querySelector(".runDFS");
   const context = gridLayer.getContext("2d");
   gridLayer.width = width;
   gridLayer.height = width / 2;
@@ -103,9 +108,11 @@ window.addEventListener("load", () => {
         drawEnd = true;
       } else if (selectedNode.getisStart()) {
         drawStart = false;
+        startNode = null;
         selectedNode.setNotVisited(ctx);
       } else if (selectedNode.getisEnd()) {
         drawEnd = false;
+        endNode = null;
         selectedNode.setNotVisited(ctx);
       } else if (drawStart && drawEnd) {
         selectedNode.setWall(ctx);
@@ -143,9 +150,41 @@ window.addEventListener("load", () => {
     removeWall = false;
   });
   runBfsBtn.addEventListener("click", () => {
-    grid.style.pointerEvents = "none";
     if (startNode != null && endNode != null) {
+      grid.style.pointerEvents = "none";
       runBFSAlgo(ctx, cellList, startNode, endNode);
     }
+  });
+  runAstarBtn.addEventListener("click", () => {
+    if (startNode != null && endNode != null) {
+      grid.style.pointerEvents = "none";
+      runAstarAlgo(ctx, cellList, startNode, endNode);
+    }
+  });
+  runDFSBtn.addEventListener("click", () => {
+    if (startNode != null && endNode != null) {
+      grid.style.pointerEvents = "none";
+      runDFSAlgo(ctx, cellList, startNode, endNode);
+    }
+  });
+  resetGridBtn.addEventListener("click", () => {
+    if (cellList.length == 0) {
+      return;
+    }
+    grid.style.pointerEvents = "all";
+    cellList.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.getisDiscovered() || cell.getisVisited()) {
+          cell.setNotVisited(ctx);
+          cell.resetNode();
+        }
+        if (cell.getisStart()) {
+          cell.resetNode();
+        }
+        if (cell.getisEnd()) {
+          cell.resetNode();
+        }
+      });
+    });
   });
 });

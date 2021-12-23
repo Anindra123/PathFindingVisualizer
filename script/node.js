@@ -1,9 +1,4 @@
-const notVisitedCol = "rgb(255,255,255)";
-const visitedCol = "rgb(100,255,255)";
-const wallCol = "rgb(127,127,127)";
-const startCol = "rgb(255,0,0)";
-const endCol = "rgb(51,255,0)";
-const discoveredCol = "rgb(4,180,255)";
+import { nodeColor } from "./nodeColor.js";
 
 export class Node {
   constructor(_row, _col, _width, _total_rows) {
@@ -20,6 +15,8 @@ export class Node {
     this.start = false;
     this.end = false;
     this.distance = Infinity;
+    this.g_score = Infinity;
+    this.f_score = Infinity;
     this.neighbourNodes = [];
     this.parentNode = null;
   }
@@ -35,10 +32,17 @@ export class Node {
     this.end = false;
     this.discovered = false;
   }
+  resetNode() {
+    this.distance = Infinity;
+    this.g_score = Infinity;
+    this.f_score = Infinity;
+    this.neighbourNodes = [];
+    this.parentNode = null;
+  }
   setNotVisited(ctx) {
     this.resetNodeState();
     this.notVisited = true;
-    this.drawNode(ctx, notVisitedCol);
+    this.drawNode(ctx, nodeColor.notVisitedCol);
   }
   setVisited() {
     this.resetNodeState();
@@ -47,17 +51,17 @@ export class Node {
   setWall(ctx) {
     this.resetNodeState();
     this.wall = true;
-    this.drawNode(ctx, wallCol);
+    this.drawNode(ctx, nodeColor.wallCol);
   }
   setStart(ctx) {
     this.resetNodeState();
     this.start = true;
-    this.drawNode(ctx, startCol);
+    this.drawNode(ctx, nodeColor.startCol);
   }
   setEnd(ctx) {
     this.resetNodeState();
     this.end = true;
-    this.drawNode(ctx, endCol);
+    this.drawNode(ctx, nodeColor.endCol);
   }
   setParentNode(node) {
     this.parentNode = node;
@@ -91,4 +95,66 @@ export class Node {
   getNodePos() {
     return [this.row, this.col];
   }
+}
+
+export function GetNeighbours(q, row, col, grid) {
+  let upNode;
+  let downNode;
+  let leftNode;
+  let rightNode;
+  try {
+    if (row - 1 >= 0) {
+      upNode = grid[row - 1][col];
+    }
+  } catch {
+    upNode = undefined;
+  }
+  try {
+    if (col - 1 >= 0) {
+      leftNode = grid[row][col - 1];
+    }
+  } catch {
+    leftNode = undefined;
+  }
+  try {
+    downNode = grid[row + 1][col];
+  } catch {
+    downNode = undefined;
+  }
+  try {
+    rightNode = grid[row][col + 1];
+  } catch {
+    rightNode = undefined;
+  }
+  if (
+    rightNode !== undefined &&
+    (rightNode.getisNotVisited() || rightNode.getisEnd())
+  ) {
+    q.push(rightNode);
+  }
+  if (upNode !== undefined && (upNode.getisNotVisited() || upNode.getisEnd())) {
+    q.push(upNode);
+  }
+  if (
+    leftNode !== undefined &&
+    (leftNode.getisNotVisited() || leftNode.getisEnd())
+  ) {
+    q.push(leftNode);
+  }
+  if (
+    downNode !== undefined &&
+    (downNode.getisNotVisited() || downNode.getisEnd())
+  ) {
+    q.push(downNode);
+  }
+}
+
+export function GetShotestPathList(endNode) {
+  let shortestPathList = [];
+  let currNode = endNode;
+  while (currNode !== null) {
+    shortestPathList.unshift(currNode);
+    currNode = currNode.getParentNode();
+  }
+  return shortestPathList;
 }
