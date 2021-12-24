@@ -1,4 +1,9 @@
-import { Node, GetNeighbours, GetShotestPathList } from "../node.js";
+import {
+  Node,
+  GetNeighbours,
+  GetShotestPathList,
+  animateNodes,
+} from "../node.js";
 import { nodeColor } from "../nodeColor.js";
 
 function DFSAlgo(grid, startNode) {
@@ -8,12 +13,16 @@ function DFSAlgo(grid, startNode) {
   stack.push(startNode);
   while (stack.length > 0) {
     let currNode = stack.pop();
+    if (currNode.getisEnd()) {
+      return animateNodes;
+    }
+    neighbours.length = 0;
     GetNeighbours(neighbours, currNode.row, currNode.col, grid);
     for (let i = 0; i < neighbours.length; i++) {
       let visitedNode = neighbours[i];
       if (neighbours[i].getisEnd()) {
         neighbours[i].setParentNode(currNode);
-        return animateNodes;
+        stack.push(neighbours[i]);
       }
       if (neighbours[i].getisNotVisited()) {
         neighbours[i].setDiscovered();
@@ -45,25 +54,7 @@ function DFSAlgo(grid, startNode) {
 }
 
 export function runDFSAlgo(ctx, grid, startNode, endNode) {
-  let animateNodes = DFSAlgo(grid, startNode);
+  let nodesToAnimate = DFSAlgo(grid, startNode);
   let shortestPathNodes = GetShotestPathList(endNode);
-  let animCounter = 0;
-  for (let index = 0; index < animateNodes.length; index++) {
-    setTimeout(() => {
-      if (animateNodes[index].getisDiscovered()) {
-        animateNodes[index].drawNode(ctx, nodeColor.discoveredCol);
-      }
-      if (animateNodes[index].getisVisited()) {
-        animateNodes[index].drawNode(ctx, nodeColor.visitedCol);
-      }
-      animCounter++;
-      if (animCounter == animateNodes.length) {
-        for (let i = 1; i < shortestPathNodes.length - 1; i++) {
-          setTimeout(() => {
-            shortestPathNodes[i].drawNode(ctx, nodeColor.shortPath);
-          }, i * 50);
-        }
-      }
-    }, index * 5);
-  }
+  animateNodes(ctx, nodesToAnimate, shortestPathNodes);
 }

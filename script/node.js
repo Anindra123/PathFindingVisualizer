@@ -148,7 +148,60 @@ export function GetNeighbours(q, row, col, grid) {
     q.push(downNode);
   }
 }
-
+export function GetWeightedNeighbours(q, row, col, grid) {
+  let upNode;
+  let downNode;
+  let leftNode;
+  let rightNode;
+  try {
+    if (row - 1 >= 0) {
+      upNode = grid[row - 1][col];
+    }
+  } catch {
+    upNode = undefined;
+  }
+  try {
+    if (col - 1 >= 0) {
+      leftNode = grid[row][col - 1];
+    }
+  } catch {
+    leftNode = undefined;
+  }
+  try {
+    downNode = grid[row + 1][col];
+  } catch {
+    downNode = undefined;
+  }
+  try {
+    rightNode = grid[row][col + 1];
+  } catch {
+    rightNode = undefined;
+  }
+  if (
+    rightNode !== undefined &&
+    !rightNode.getisWall() &&
+    !rightNode.getisVisited()
+  ) {
+    q.push(rightNode);
+  }
+  if (upNode !== undefined && !upNode.getisWall() && !upNode.getisVisited()) {
+    q.push(upNode);
+  }
+  if (
+    leftNode !== undefined &&
+    !leftNode.getisWall() &&
+    !leftNode.getisVisited()
+  ) {
+    q.push(leftNode);
+  }
+  if (
+    downNode !== undefined &&
+    !downNode.getisWall() &&
+    !downNode.getisVisited()
+  ) {
+    q.push(downNode);
+  }
+}
 export function GetShotestPathList(endNode) {
   let shortestPathList = [];
   let currNode = endNode;
@@ -157,4 +210,26 @@ export function GetShotestPathList(endNode) {
     currNode = currNode.getParentNode();
   }
   return shortestPathList;
+}
+
+export function animateNodes(ctx, nodesToAnimate, shortestPathNodes) {
+  let animCounter = 0;
+  for (let i = 0; i < nodesToAnimate.length; i++) {
+    setTimeout(() => {
+      if (nodesToAnimate[i].getisDiscovered()) {
+        nodesToAnimate[i].drawNode(ctx, nodeColor.discoveredCol);
+      }
+      if (nodesToAnimate[i].getisVisited()) {
+        nodesToAnimate[i].drawNode(ctx, nodeColor.visitedCol);
+      }
+      animCounter++;
+      if (animCounter === nodesToAnimate.length) {
+        for (let i = 1; i < shortestPathNodes.length - 1; i++) {
+          setTimeout(() => {
+            shortestPathNodes[i].drawNode(ctx, nodeColor.shortPath);
+          }, i * 50);
+        }
+      }
+    }, i * 5);
+  }
 }

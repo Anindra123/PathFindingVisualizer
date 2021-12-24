@@ -1,4 +1,10 @@
-import { Node, GetNeighbours, GetShotestPathList } from "../node.js";
+import {
+  Node,
+  GetNeighbours,
+  GetShotestPathList,
+  animateNodes,
+  GetWeightedNeighbours,
+} from "../node.js";
 import { nodeColor } from "../nodeColor.js";
 
 function hueristic(startNode, endNode) {
@@ -25,7 +31,7 @@ function AstarAlgo(ctx, grid, startNode, endNode) {
       return animatNodes;
     }
     neighbours.length = 0;
-    GetNeighbours(neighbours, currNode.row, currNode.col, grid);
+    GetWeightedNeighbours(neighbours, currNode.row, currNode.col, grid);
 
     for (let i = 0; i < neighbours.length; i++) {
       let visitedNode = neighbours[i];
@@ -48,7 +54,6 @@ function AstarAlgo(ctx, grid, startNode, endNode) {
           discoverdAnimateNode.setDiscovered();
           animatNodes.push(discoverdAnimateNode);
         }
-
         open_list.push(visitedNode);
 
         open_list.sort(function (a, b) {
@@ -73,25 +78,7 @@ function AstarAlgo(ctx, grid, startNode, endNode) {
 }
 
 export function runAstarAlgo(ctx, grid, startNode, endNode) {
-  let animateNodes = AstarAlgo(ctx, grid, startNode, endNode);
-  let currAnim = 0;
+  let nodesToAnimate = AstarAlgo(ctx, grid, startNode, endNode);
   let shortestPathList = GetShotestPathList(endNode);
-  for (let i = 0; i < animateNodes.length; i++) {
-    setTimeout(() => {
-      if (animateNodes[i].getisDiscovered()) {
-        animateNodes[i].drawNode(ctx, nodeColor.discoveredCol);
-      }
-      if (animateNodes[i].getisVisited()) {
-        animateNodes[i].drawNode(ctx, nodeColor.visitedCol);
-      }
-      currAnim++;
-      if (currAnim == animateNodes.length) {
-        for (let i = 1; i < shortestPathList.length - 1; i++) {
-          setTimeout(() => {
-            shortestPathList[i].drawNode(ctx, nodeColor.shortPath);
-          }, i * 50);
-        }
-      }
-    }, i * 5);
-  }
+  animateNodes(ctx, nodesToAnimate, shortestPathList);
 }

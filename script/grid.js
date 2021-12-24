@@ -1,6 +1,8 @@
 import { runAstarAlgo } from "./Algorithms/Astar.js";
 import { runBFSAlgo } from "./Algorithms/bfs.js";
 import { runDFSAlgo } from "./Algorithms/dfs.js";
+import { runDijakstraAlgo } from "./Algorithms/Dijakstra.js";
+import { GenerateMaze } from "./Algorithms/RecursiveBackTack.js";
 import { Node } from "./node.js";
 function getCellPos(xpos, ypos, width, rows) {
   let x = xpos;
@@ -70,8 +72,11 @@ window.addEventListener("load", () => {
   const gridLayer = document.querySelector("#grid-layer");
   const runBfsBtn = document.querySelector(".runBFS");
   const runAstarBtn = document.querySelector(".runAstar");
-  const resetGridBtn = document.querySelector(".resetGrid");
+  const clearPathBtn = document.querySelector(".clearPath");
   const runDFSBtn = document.querySelector(".runDFS");
+  const runDijakstraBn = document.querySelector(".runDijakstra");
+  const resetGridBtn = document.querySelector(".resetGrid");
+  const generateMazeBtn = document.querySelector(".generateMaze");
   const context = gridLayer.getContext("2d");
   gridLayer.width = width;
   gridLayer.height = width / 2;
@@ -114,8 +119,6 @@ window.addEventListener("load", () => {
         drawEnd = false;
         endNode = null;
         selectedNode.setNotVisited(ctx);
-      } else if (drawStart && drawEnd) {
-        selectedNode.setWall(ctx);
       }
     }
   });
@@ -167,7 +170,50 @@ window.addEventListener("load", () => {
       runDFSAlgo(ctx, cellList, startNode, endNode);
     }
   });
+  runDijakstraBn.addEventListener("click", () => {
+    if (startNode != null && endNode != null) {
+      grid.style.pointerEvents = "none";
+      runDijakstraAlgo(ctx, cellList, startNode, endNode);
+    }
+  });
   resetGridBtn.addEventListener("click", () => {
+    grid.style.pointerEvents = "all";
+    cellList.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.getisDiscovered() || cell.getisVisited() || cell.getisWall()) {
+          cell.setNotVisited(ctx);
+          cell.resetNode();
+        }
+        if (cell.getisStart()) {
+          cell.resetNode();
+        }
+        if (cell.getisEnd()) {
+          cell.resetNode();
+        }
+      });
+    });
+  });
+  generateMazeBtn.addEventListener("click", () => {
+    if (startNode != null && endNode != null) {
+      startNode.setNotVisited(ctx);
+      startNode.resetNode();
+      startNode = null;
+      drawStart = false;
+      endNode.setNotVisited(ctx);
+      endNode.resetNode();
+      endNode = null;
+      drawEnd = false;
+    }
+    grid.style.pointerEvents = "all";
+    cellList.forEach((row) => {
+      row.forEach((cell) => {
+        cell.setNotVisited(ctx);
+        cell.resetNode();
+      });
+    });
+    GenerateMaze(ctx, cellList);
+  });
+  clearPathBtn.addEventListener("click", () => {
     if (cellList.length == 0) {
       return;
     }
