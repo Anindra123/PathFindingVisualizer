@@ -214,6 +214,7 @@ export function GetShotestPathList(endNode) {
 
 export function animateNodes(ctx, nodesToAnimate, shortestPathNodes) {
   let animCounter = 0;
+  let shortPathNodeCounter = 1;
   for (let i = 0; i < nodesToAnimate.length; i++) {
     setTimeout(() => {
       if (nodesToAnimate[i].getisDiscovered()) {
@@ -227,6 +228,12 @@ export function animateNodes(ctx, nodesToAnimate, shortestPathNodes) {
         for (let i = 1; i < shortestPathNodes.length - 1; i++) {
           setTimeout(() => {
             shortestPathNodes[i].drawNode(ctx, nodeColor.shortPath);
+            shortPathNodeCounter++;
+            if (shortPathNodeCounter === shortestPathNodes.length - 1) {
+              document.querySelector(".resetGrid").disabled = false;
+              document.querySelector(".clearPath").disabled = false;
+              document.querySelector(".generateMaze").disabled = false;
+            }
           }, i * 50);
         }
       }

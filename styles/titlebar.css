@@ -1,0 +1,56 @@
+.titleBar {
+  padding: 20px;
+  background-color: rgb(37, 37, 37);
+  display: flex;
+  align-items: center;
+  border-bottom: solid 3px turquoise;
+}
+.titleContainer {
+  margin-right: 40px;
+}
+.buttonContainer {
+  display: flex;
+}
+.selectionBox {
+  display: flex;
+  margin-right: 20px;
+  align-items: center;
+}
+.selectionBox select {
+  padding: 5px 80px 5px 0px;
+  outline: none;
+}
+
+.buttons {
+  display: flex;
+}
+.buttons button {
+  margin-right: 40px;
+  padding: 12px 15px;
+  border: solid 2px whitesmoke;
+  background: none;
+  border-radius: 2px;
+  color: whitesmoke;
+  font-family: inherit;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.buttons button:disabled {
+  cursor: default;
+  border: solid 2px #fff9;
+  color: #fff9;
+}
+.buttons button:not([disabled]):hover {
+  background-color: whitesmoke;
+  color: black;
+}
+.selectionBoxTitle {
+  margin-right: 10px;
+}
+
+h1,
+h2,
+h3 {
+  color: aliceblue;
+}

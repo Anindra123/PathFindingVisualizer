@@ -1,8 +1,3 @@
-import { runAstarAlgo } from "./Algorithms/Astar.js";
-import { runBFSAlgo } from "./Algorithms/bfs.js";
-import { runDFSAlgo } from "./Algorithms/dfs.js";
-import { runDijakstraAlgo } from "./Algorithms/Dijakstra.js";
-import { GenerateMaze } from "./Algorithms/RecursiveBackTack.js";
 import { Node } from "./node.js";
 function getCellPos(xpos, ypos, width, rows) {
   let x = xpos;
@@ -64,173 +59,30 @@ function drawNotVisitedNode(ctx, cellList, row, col) {
     return;
   }
 }
-window.addEventListener("load", () => {
-  const grid = document.querySelector("#grid");
-  const ctx = grid.getContext("2d");
-  const width = 1000;
-  const rows = 50;
-  const gridLayer = document.querySelector("#grid-layer");
-  const runBfsBtn = document.querySelector(".runBFS");
-  const runAstarBtn = document.querySelector(".runAstar");
-  const clearPathBtn = document.querySelector(".clearPath");
-  const runDFSBtn = document.querySelector(".runDFS");
-  const runDijakstraBn = document.querySelector(".runDijakstra");
-  const resetGridBtn = document.querySelector(".resetGrid");
-  const generateMazeBtn = document.querySelector(".generateMaze");
-  const context = gridLayer.getContext("2d");
-  gridLayer.width = width;
-  gridLayer.height = width / 2;
-  grid.width = width;
-  grid.height = width / 2;
-  const cellList = getCellList(rows, width);
-  drawGrid(ctx, cellList, rows, width);
-  drawGridLines(context, rows, width);
-  let drawWall = false;
-  let removeWall = false;
-  let drawStart = false;
-  let drawEnd = false;
-  let startNode = null;
-  let endNode = null;
-  grid.addEventListener("click", (e) => {
-    let [row, col] = getCellPos(e.offsetX, e.offsetY, width, rows);
-    let selectedNode = cellList[row][col];
-    if (e.button == 0) {
-      if (
-        selectedNode.getisNotVisited() &&
-        !selectedNode.getisWall() &&
-        !drawStart
-      ) {
-        selectedNode.setStart(ctx);
-        startNode = selectedNode;
-        drawStart = true;
-      } else if (
-        selectedNode.getisNotVisited() &&
-        !selectedNode.getisWall() &&
-        !drawEnd
-      ) {
-        selectedNode.setEnd(ctx);
-        endNode = selectedNode;
-        drawEnd = true;
-      } else if (selectedNode.getisStart()) {
-        drawStart = false;
-        startNode = null;
-        selectedNode.setNotVisited(ctx);
-      } else if (selectedNode.getisEnd()) {
-        drawEnd = false;
-        endNode = null;
-        selectedNode.setNotVisited(ctx);
+function pickRandStartAndEnd(ctx, grid) {
+  let notvisitedList = [];
+  grid.forEach((row) => {
+    row.forEach((cell) => {
+      if (cell.getisNotVisited()) {
+        notvisitedList.push(cell);
       }
-    }
-  });
-  grid.addEventListener("mousedown", (e) => {
-    if (e.button == 0) {
-      drawWall = true;
-    }
-    if (e.button == 1) {
-      removeWall = true;
-    }
-  });
-  grid.addEventListener("mousemove", (e) => {
-    let [row, col] = getCellPos(e.offsetX, e.offsetY, width, rows);
-    try {
-      if (drawWall) {
-        drawWallNode(ctx, cellList, row, col);
-      }
-      if (removeWall) {
-        drawNotVisitedNode(ctx, cellList, row, col);
-      }
-    } catch {
-      drawWall = false;
-      removeWall = false;
-    }
-  });
-  grid.addEventListener("mouseout", () => {
-    drawWall = false;
-    removeWall = false;
-  });
-  grid.addEventListener("mouseup", () => {
-    drawWall = false;
-    removeWall = false;
-  });
-  runBfsBtn.addEventListener("click", () => {
-    if (startNode != null && endNode != null) {
-      grid.style.pointerEvents = "none";
-      runBFSAlgo(ctx, cellList, startNode, endNode);
-    }
-  });
-  runAstarBtn.addEventListener("click", () => {
-    if (startNode != null && endNode != null) {
-      grid.style.pointerEvents = "none";
-      runAstarAlgo(ctx, cellList, startNode, endNode);
-    }
-  });
-  runDFSBtn.addEventListener("click", () => {
-    if (startNode != null && endNode != null) {
-      grid.style.pointerEvents = "none";
-      runDFSAlgo(ctx, cellList, startNode, endNode);
-    }
-  });
-  runDijakstraBn.addEventListener("click", () => {
-    if (startNode != null && endNode != null) {
-      grid.style.pointerEvents = "none";
-      runDijakstraAlgo(ctx, cellList, startNode, endNode);
-    }
-  });
-  resetGridBtn.addEventListener("click", () => {
-    grid.style.pointerEvents = "all";
-    cellList.forEach((row) => {
-      row.forEach((cell) => {
-        if (cell.getisDiscovered() || cell.getisVisited() || cell.getisWall()) {
-          cell.setNotVisited(ctx);
-          cell.resetNode();
-        }
-        if (cell.getisStart()) {
-          cell.resetNode();
-        }
-        if (cell.getisEnd()) {
-          cell.resetNode();
-        }
-      });
     });
   });
-  generateMazeBtn.addEventListener("click", () => {
-    if (startNode != null && endNode != null) {
-      startNode.setNotVisited(ctx);
-      startNode.resetNode();
-      startNode = null;
-      drawStart = false;
-      endNode.setNotVisited(ctx);
-      endNode.resetNode();
-      endNode = null;
-      drawEnd = false;
-    }
-    grid.style.pointerEvents = "all";
-    cellList.forEach((row) => {
-      row.forEach((cell) => {
-        cell.setNotVisited(ctx);
-        cell.resetNode();
-      });
-    });
-    GenerateMaze(ctx, cellList);
-  });
-  clearPathBtn.addEventListener("click", () => {
-    if (cellList.length == 0) {
-      return;
-    }
-    grid.style.pointerEvents = "all";
-    cellList.forEach((row) => {
-      row.forEach((cell) => {
-        if (cell.getisDiscovered() || cell.getisVisited()) {
-          cell.setNotVisited(ctx);
-          cell.resetNode();
-        }
-        if (cell.getisStart()) {
-          cell.resetNode();
-        }
-        if (cell.getisEnd()) {
-          cell.resetNode();
-        }
-      });
-    });
-  });
-});
+  let startNode =
+    notvisitedList[Math.floor(Math.random() * notvisitedList.length)];
+  let endNode =
+    notvisitedList[Math.floor(Math.random() * notvisitedList.length)];
+  startNode.setStart(ctx);
+  endNode.setEnd(ctx);
+  return [startNode, endNode];
+}
+
+export {
+  getCellList,
+  getCellPos,
+  drawGrid,
+  drawGridLines,
+  drawNotVisitedNode,
+  drawWallNode,
+  pickRandStartAndEnd,
+};

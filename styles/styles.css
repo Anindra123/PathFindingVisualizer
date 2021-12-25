@@ -10,6 +10,46 @@ body {
 .mainbody {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+footer {
+  border-top: solid 3px turquoise;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 600px;
+  background-color: black;
+  padding: 10px;
+}
+
+footer svg {
+  width: 40px;
+  height: 40px;
+  fill: rgb(146, 146, 146);
+  transition: all 0.3s ease-in-out;
+}
+
+footer a {
+  text-decoration: none;
+  color: cyan;
+}
+footer a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+footer svg:hover {
+  fill: whitesmoke;
+  cursor: pointer;
+}
+footer .projRepoClass {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+footer .projRepoClass h3 {
+  margin-right: 20px;
+}
+footer h3 {
+  font-size: 20px;
 }

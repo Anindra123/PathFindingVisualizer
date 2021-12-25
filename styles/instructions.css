@@ -1,0 +1,54 @@
+.instructionBar {
+  display: flex;
+  padding: 10px;
+  justify-content: space-evenly;
+  background-color: whitesmoke;
+}
+
+.mouseInstruction {
+  width: 200px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+}
+.mouseInstruction p {
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.nodeInstruction {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.nodeInstruction .box {
+  width: 20px;
+  height: 20px;
+  border: solid 2px black;
+}
+.nodeInstruction #start {
+  background-color: rgb(255, 0, 0);
+}
+.nodeInstruction #end {
+  background-color: rgb(51, 255, 0);
+}
+.nodeInstruction #visited {
+  background-color: rgb(100, 255, 255);
+}
+.nodeInstruction #notVisited {
+  background-color: rgb(255, 255, 255);
+}
+.nodeInstruction #wall {
+  background-color: rgb(127, 127, 127);
+}
+.nodeInstruction #path {
+  background-color: rgb(255, 255, 4);
+}
+.nodeInstruction #discovered {
+  background-color: rgb(4, 180, 255);
+}
+.nodeInstruction p {
+  font-size: 12px;
+  font-weight: bold;
+}
