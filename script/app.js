@@ -19,6 +19,7 @@ window.addEventListener("load", () => {
   const clearPathBtn = document.querySelector(".clearPath");
   const resetGridBtn = document.querySelector(".resetGrid");
   const generateMazeBtn = document.querySelector(".generateMaze");
+  const messageBox = document.querySelector(".message");
   const context = gridLayer.getContext("2d");
   gridLayer.width = width;
   gridLayer.height = width / 2;
@@ -118,18 +119,30 @@ window.addEventListener("load", () => {
     switch (selectedVal) {
       case "BFS":
         visualizeBtn.textContent = "Visualize BFS";
+        messageBox.textContent =
+          "BFS or Breadth First Search algorithm finds the shortest path by travelling each of its neighbouring node or checking all nodes at current breadth.Doesn't work for weighted graphs.";
+        messageBox.style.color = "black";
         visualizeBtn.disabled = false;
         break;
       case "DFS":
         visualizeBtn.textContent = "Visualize DFS";
+        messageBox.textContent =
+          "DFS or Depth first search algorithm works by going to the depth of a node and then backtracking.Doesn't work for weighted graphs.";
+        messageBox.style.color = "black";
         visualizeBtn.disabled = false;
         break;
       case "Astar":
         visualizeBtn.textContent = "Visualize Astar";
+        messageBox.textContent =
+          "A* is an informative search algorithm that works by calculating the distance of each node and huerisitic distance.Works for weighted graph aswell, here the huerisitic is manhattan distance.";
+        messageBox.style.color = "black";
         visualizeBtn.disabled = false;
         break;
       case "Dijakstra":
         visualizeBtn.textContent = "Visualize Dijakstra";
+        messageBox.textContent =
+          "Dijakstra is a weighted graph search algorithm that works by picking the shortest distance neighbouring node from each node.";
+        messageBox.style.color = "black";
         visualizeBtn.disabled = false;
         break;
       default:
@@ -146,32 +159,59 @@ window.addEventListener("load", () => {
     selectAlgorithm.disabled = true;
     grid.style.pointerEvents = "none";
   };
+  const enableAll = () => {
+    visualizeBtn.disabled = false;
+    clearPathBtn.disabled = false;
+    resetGridBtn.disabled = false;
+    generateMazeBtn.disabled = false;
+    selectAlgorithm.disabled = false;
+    grid.style.pointerEvents = "all";
+  };
   visualizeBtn.addEventListener("click", (e) => {
     if (startNode !== null && endNode !== null) {
       disableButtonAndGrid();
+    } else {
+      messageBox.textContent = "Start Node and End Node needs to be selected";
+      messageBox.style.color = "red";
     }
     switch (e.target.textContent) {
       case "Visualize BFS":
         if (startNode !== null && endNode !== null) {
+          messageBox.textContent =
+            "BFS or Breadth First Search algorithm finds the shortest path by travelling each of its neighbouring node or checking all nodes at current breadth.Doesn't work for weighted graphs.";
+          messageBox.style.color = "black";
           runBFSAlgo(ctx, cellList, startNode, endNode);
         }
         break;
       case "Visualize DFS":
         if (startNode !== null && endNode !== null) {
+          messageBox.textContent =
+            "DFS or Depth first search algorithm works by going to the depth of a node and then backtracking.Doesn't work for weighted graphs.";
+          messageBox.style.color = "black";
           runDFSAlgo(ctx, cellList, startNode, endNode);
         }
         break;
       case "Visualize Astar":
         if (startNode !== null && endNode !== null) {
+          messageBox.textContent =
+            "A* is an informative search algorithm that works by calculating the distance of each node and huerisitic distance.Works for weighted graph aswell, here the huerisitic is manhattan distance.";
+          messageBox.style.color = "black";
           runAstarAlgo(ctx, cellList, startNode, endNode);
         }
         break;
       case "Visualize Dijakstra":
         if (startNode !== null && endNode !== null) {
+          messageBox.textContent =
+            "Dijakstra is a weighted graph search algorithm that works by picking the shortest distance neighbouring node from each node.";
+          messageBox.style.color = "black";
           runDijakstraAlgo(ctx, cellList, startNode, endNode);
         }
         break;
       default:
+        messageBox.textContent =
+          "An algorithm must be selected for visualization";
+        messageBox.style.color = "red";
+        enableAll();
         break;
     }
   });

@@ -26,13 +26,13 @@
 }
 .buttons button {
   margin-right: 40px;
-  padding: 12px 15px;
+  padding: 12px 10px;
   border: solid 2px whitesmoke;
   background: none;
   border-radius: 2px;
   color: whitesmoke;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 12px;
   transition: all 0.3s ease;
   cursor: pointer;
 }

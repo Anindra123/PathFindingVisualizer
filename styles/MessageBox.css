@@ -1,0 +1,13 @@
+.messageBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.messageBox .message {
+  font-size: 15px;
+  color: rgb(8, 8, 8);
+  font-weight: bold;
+}
