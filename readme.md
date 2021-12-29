@@ -35,4 +35,4 @@ A website to visualize all path finding algorithms.This is one project that i al
 ![dfs-visualization](https://github.com/Anindra123/PathFindingVisualizer/blob/main/Images/dfs-visualization.gif)
 ---
 # Link
-Live version of the website : ![PathFinding Visualizer](https://anindra123.github.io/PathFindingVisualizer)
+Live version of the website : [PathFinding Visualizer](https://anindra123.github.io/PathFindingVisualizer)
